@@ -3,7 +3,7 @@ A Matlab graphical user interface (GUI) for rendering 3D mouse brain structures
 ## Getting Started
 Run ```BrainMesh.m``` in MATLAB (R2019)
 ## Highlighted Features
-* Select brain structures direct from a tree component
+* Select Allen brain structures direct from a tree component
 * Render uinilateral (only left or right) or bilateral part of a brain structure
 * Support custom data points, slice images and 3D structures
 * Export 3D images and/or videos w/ spining against x, y or z axis
