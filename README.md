@@ -14,6 +14,6 @@ BrainMesh: A Matlab GUI for rendering 3D mouse brain structures (2020) https://g
 ## Contribution
 Feel free to pull a request If you want to contribute code to this repository, or leave any messages in the Issues page.
 ## Similar Tools
-*In R: cocoframer https://github.com/AllenInstitute/cocoframer
-*In python: BrainRender https://github.com/BrancoLab/BrainRender
+* In R: cocoframer https://github.com/AllenInstitute/cocoframer
+* In python: BrainRender https://github.com/BrancoLab/BrainRender
 ## Reference
