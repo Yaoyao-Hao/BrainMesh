@@ -8,7 +8,7 @@ Run ```BrainMesh.m``` in MATLAB (R2019)
 * Support custom data points, slice images and 3D structures
 * Export 3D images and/or videos w/ spining against x, y or z axis
 ## Toturial
-![alt text](http://url/to/img.png)
+![alt text](https://github.com/yaoyao-hao/BrainMesh/2020-02-03_17-37-59.gif)
 
 ## Citation
 BrainMesh: A Matlab GUI for rendering 3D mouse brain structures (2020) https://github.com/yaoyao-hao/BrainMesh/
