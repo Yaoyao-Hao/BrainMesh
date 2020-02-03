@@ -18,7 +18,7 @@ Feel free to pull a request If you want to contribute code to this repository, o
 * In R: cocoframer https://github.com/AllenInstitute/cocoframer
 * In python: BrainRender https://github.com/BrancoLab/BrainRender
 ## Reference
-* Brain structure data from Allen Institute : http://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/
-* Structure ontology from: http://api.brain-map.org/api/v2/data/query.csv?criteria=model::Structure,rma::criteria,[ontology_id$eq1],rma::options[order$eq%27structures.graph_order%27][num_rows$eqall]
+* Brain structure mesh data from Allen Institute: http://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/annotation/ccf_2017/structure_meshes/
+* Brain structure ontology from: http://api.brain-map.org/api/v2/data/query.csv?criteria=model::Structure,rma::criteria,[ontology_id$eq1],rma::options[order$eq%27structures.graph_order%27][num_rows$eqall]
 * Obj file reader from: https://www.mathworks.com/matlabcentral/fileexchange/10223-loadawobj 
 * rgb2hex and hex2rgb from: https://www.mathworks.com/matlabcentral/fileexchange/46289-rgb2hex-and-hex2rgb
