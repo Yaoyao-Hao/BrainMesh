@@ -14,6 +14,10 @@ Run ```BrainMesh.m``` in MATLAB (R2019)
 * Support custom data points, slice images and 3D structures
 * Export 3D images and/or videos w/ spining against x, y or z axis
 ## Toturial
+* Following the 3 steps in the main GUI to render brain structures you want.
+** STEP 1/3: Select brain structure(s) and add to the right Table
+**
+**
 ![alt text](https://github.com/yaoyao-hao/BrainMesh/blob/master/2020-02-03_17-37-59.gif)
 
 ## Citation
