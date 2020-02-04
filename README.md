@@ -19,8 +19,8 @@ Run ```BrainMesh.m``` in MATLAB (R2019)
   - STEP 1/3: Select brain structure in the tree component (left side) and click 'add>>' button to add the selected brain structure into the table on the right side; add as many structures as you want; press 'ctrl' key to select multiple brain structures. Tip: the same structure could be added twice (with a warning), so that you can render it with different parameters (e.g., color, left/right part, etc.).
   
   - STEP 2/3: For each brain in the Table, click the color cell to pick a color for that brain structure; 
-  Change alpha value to adjust the transparency (0-totally transparent, 1-opaque); 
-  Chose the left or right or both side of the structure to be rendered by clicking the corresponding check box.
+  - Change alpha value to adjust the transparency (0-totally transparent, 1-opaque); 
+  - Chose the left or right or both side of the structure to be rendered by clicking the corresponding check box.
   
   - STEP 2/3 (optional): You can also load you own data points (.mat file, nx3 matrix), slice image (aligned to Allen brain atlas CCF), and your own 3d structure (.obj file or .mat file with v (verticies) and F (Faces) field) to the Table. BrainMesh will render them with the brain structures you selected in the same scene. see example data in foleder './Data/example_data/'
   
