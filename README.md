@@ -2,8 +2,6 @@
 
 A Matlab graphical user interface (GUI) for rendering 3D mouse brain structures
 
-![alt text](https://github.com/yaoyao-hao/BrainMesh/blob/master/docs/media/maingui.png)
-
 ![alt text](https://github.com/yaoyao-hao/BrainMesh/blob/master/docs/media/spin.gif)
 
 ## Getting Started
@@ -15,6 +13,7 @@ Run ```BrainMesh.m``` in MATLAB (R2019)
 * Export 3D images and/or videos w/ spining against x, y or z axis
 ## Toturial
 * Following the **3 steps** in the main GUI to render brain structures you want.
+  - ![alt text](https://github.com/yaoyao-hao/BrainMesh/blob/master/docs/media/maingui.png)
 
   - **STEP 1/3**: Select brain structure in the tree component (left side) and click 'add>>' button to add the selected brain structure into the table on the right side; Add as many structures as you want; Press 'ctrl' key to select multiple brain structures. *Tip:* the same structure could be added twice (with a warning), so that you can render it with different parameters (e.g., color, left/right part, etc.).
   - **STEP 2/3**: For each brain in the Table, click the color cell to pick a color for that brain structure; Change alpha value to adjust the transparency (0-totally transparent, 1-opaque); Chose the left or right or both side of the structure to be rendered by clicking the corresponding check box.
