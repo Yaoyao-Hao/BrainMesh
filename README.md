@@ -23,8 +23,8 @@ Run ```BrainMesh.m``` in MATLAB (R2019)
   
 * **Customize** the scene in the rendering window and **export** image or video with spining
   - ![alt text](https://github.com/yaoyao-hao/BrainMesh/blob/master/docs/media/toolbar.png)
-  - using the camera toolbar to custom the scene, as shwon below
-  - using the spin x, y, z toolbar to spin the rendered brain one cycle
+  - using the camera toolbar to custom the scene, as shwon above
+  - using the spin x, y, z toolbar to spin the rendered brain a circle
   - using the export video toolbar to export a video with customized parameter
 
 ## Citation
