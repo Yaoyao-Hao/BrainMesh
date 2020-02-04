@@ -29,6 +29,7 @@ Run ```BrainMesh.m``` in MATLAB (R2019)
   - using the camera toolbar to custom the scene, as shwon above
   - using the spin x, y, z toolbar to spin the rendered brain a circle
   - using the export video toolbar to export a video with customized parameter
+  - select menu->File->Save to save the current scene to an image.
 
 ## Citation
 BrainMesh: A Matlab GUI for rendering 3D mouse brain structures (2020) https://github.com/yaoyao-hao/BrainMesh/
