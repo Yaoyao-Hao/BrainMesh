@@ -2,9 +2,9 @@
 
 A Matlab graphical user interface (GUI) for rendering 3D mouse brain structures
 
-![alt text](https://github.com/yaoyao-hao/BrainMesh/blob/master/docs/media/maingu.png)
+![alt text](https://github.com/yaoyao-hao/BrainMesh/blob/master/docs/media/maingui.png)
 
-![alt text](https://github.com/yaoyao-hao/BrainMesh/blob/master/docs/media/spn.gif)
+![alt text](https://github.com/yaoyao-hao/BrainMesh/blob/master/docs/media/spin.gif)
 
 ## Getting Started
 Run ```BrainMesh.m``` in MATLAB (R2019)
@@ -22,7 +22,7 @@ Run ```BrainMesh.m``` in MATLAB (R2019)
   - **STEP 3/3**: Click the 'Start Rendering..' button to render all the items in the table in a new window (rendering). This will take a few minutes since the BrainMesh will first download the structure from Allen Institure and load them into the workspace to render. *Tip:* click the 'Download all structures' button at the left bottom will download all the 840 Allen brain structures (227 MB) to your computer. This will accelerate the speed for rendering.
   
 * **Customize** the scene in the rendering window and **export** image or video with spining
-  - ![alt text](https://github.com/yaoyao-hao/BrainMesh/blob/master/2020-02-03_17-37-59.gif)
+  - ![alt text](https://github.com/yaoyao-hao/BrainMesh/blob/master/docs/media/toolbar.png)
   - using the camera toolbar to custom the scene, as shwon below
   - using the spin x, y, z toolbar to spin the rendered brain one cycle
   - using the export video toolbar to export a video with customized parameter
