@@ -1,6 +1,6 @@
 # BrainMesh
 
-A Matlab graphical user interface (GUI) for rendering 3D mouse brain structures
+**A Matlab graphical user interface (GUI) for rendering 3D mouse brain structures**
 
 ![alt text](https://github.com/yaoyao-hao/BrainMesh/blob/master/docs/media/spin.gif)
 
@@ -27,7 +27,7 @@ Run ```BrainMesh.m``` in MATLAB (R2019)
   - using the export video toolbar to export a video with customized parameter
 
 ## Citation
-BrainMesh: A Matlab GUI for rendering 3D mouse brain structures (2020) https://github.com/yaoyao-hao/BrainMesh/
+```BrainMesh: A Matlab GUI for rendering 3D mouse brain structures (2020) https://github.com/yaoyao-hao/BrainMesh/```
 ## Contribution
 Feel free to pull a request If you want to contribute code to this repository, or leave messages (bugs, comments, etc.) in the Issues page.
 ## Similar Tools
