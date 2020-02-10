@@ -42,23 +42,30 @@ classdef BrainMesh < matlab.apps.AppBase
         function startupFcn(app, var)
             % Change to current folder
             if(~isdeployed)
-                cd(fileparts(which('BrainMesh.m')));
-                addpath(fileparts(which('BrainMesh.m')));
+                cd(fileparts(which('BrainMesh..m')));
+                addpath(fileparts(which('BrainMesh..m')));
                 addpath(".\functions\");
             end
             
             wf = waitbar(0,'Loading data...');
             
-            % init Tree
-            s = load('.\Data\structureTreeTable.mat'); % 2-id; 10-parent id; 4 - full name; 11 - order
-            app.all_structures = s.structureTreeTable;
-            
-            % load structures list with avaiable obj_files
-            s = load(".\Data\Allen_obj_file_list.mat");
-            app.Allen_obj_file_list = s.Allen_obj_file_list;
+            try
+                % load Allen brain ontology structure table
+                s = load('.\Data\structureTreeTable.mat'); % col 2-id; 10-parent id; 4 - full name; 11 - order
+                app.all_structures = s.structureTreeTable;
+                
+                % load structures list with corresponding obj_files
+                s = load(".\Data\Allen_obj_file_list.mat");
+                app.Allen_obj_file_list = s.Allen_obj_file_list;
+            catch e
+                errordlg(['Loading data: ' e.message]);
+                close(wf);
+                return;
+            end
             
             waitbar(0.1,wf,'Loading data...');
             
+            % init tree
             node_handles = []; node_handles_id = [];
             node_handle = uitreenode(app.Tree,'Text',app.all_structures{1,4}{1},'NodeData',app.all_structures{1,1}+1); %
             node_handles = [node_handles node_handle];
@@ -75,8 +82,8 @@ classdef BrainMesh < matlab.apps.AppBase
                     waitbar(0.1+0.8*i/size(app.all_structures,1),wf,'Initializing tree structure...');
                 end
             end
-                        
-            for i = 1:723 % numel(node_handles) before fiber track
+            
+            for i = 1:723 % expand tree node (before fiber track)
                 if app.all_structures{node_handles(i).NodeData,11} < 4
                     expand(node_handles(i));
                 end
@@ -85,7 +92,7 @@ classdef BrainMesh < matlab.apps.AppBase
             
             waitbar(0.9,wf,'Finishing...');
             
-            % init Table
+            % init Table by adding root node (default node) to the table
             app.UITable.Data = {1,'root',num2str([0.80 0.80 0.80],'%1.2f '),0.2,true,true};
             s = uistyle('BackgroundColor',[0.8 0.8 0.8]);
             addStyle(app.UITable,s,'cell',[1,3]);
@@ -95,19 +102,19 @@ classdef BrainMesh < matlab.apps.AppBase
 
         % Button pushed function: StartrenderingButton
         function StartrenderingButtonPushed(app, event)
-            waitf = uiprogressdlg(app.BrainMeshUIFigure,'Title','Please Wait','Message','Loading data...');
+            waitf = uiprogressdlg(app.BrainMeshUIFigure,'Title','Please Wait','Message','Loading data...','Cancelable','on');
             
             f = figure('name','BrainMesh->Rendering', 'numbertitle','off', 'ToolBar','none','Visible',"off");
             hold("on");
-
+            
             if(~isdeployed)
-                cd(fileparts(which('BrainMesh.m')));
+                cd(fileparts(which('BrainMesh..m')));
             end
             
-            for i = 1:size(app.UITable.Data,1)
-                waitf.Value = 0.8*i/size(app.UITable.Data,1); 
+            for i = 1:size(app.UITable.Data,1) % for each structures in the Table
+                waitf.Value = 0.8*i/size(app.UITable.Data,1);
                 waitf.Message = ['Loading and Rendering ' num2str(i) '/' num2str(size(app.UITable.Data,1)) ' structure...'];
-                if ~ischar(app.UITable.Data{i,1}) % added Allen obj files
+                if ~ischar(app.UITable.Data{i,1}) % added Allen obj files from tree
                     
                     if app.UITable.Data{i,5} || app.UITable.Data{i,6}
                         
@@ -120,15 +127,19 @@ classdef BrainMesh < matlab.apps.AppBase
                             curr_obj_file_list(i_obj) = str2double(obj_files{i}(1:end-4));
                         end
                         
-                        if ~any(app.all_structures{app.UITable.Data{i,1},2} == curr_obj_file_list) % not downloaded yet
-                            websave(['.\Data\Allen_obj_files\' num2str(app.all_structures{app.UITable.Data{i,1},2}) '.obj'],...
-                                ['http://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/annotation/ccf_2017/structure_meshes/' num2str(app.all_structures{app.UITable.Data{i,1},2}) '.obj']);
+                        if ~any(app.all_structures{app.UITable.Data{i,1},2} == curr_obj_file_list) % if not downloaded yet, download
+                            try
+                                websave(['.\Data\Allen_obj_files\' num2str(app.all_structures{app.UITable.Data{i,1},2}) '.obj'],...
+                                    ['http://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/annotation/ccf_2017/structure_meshes/' num2str(app.all_structures{app.UITable.Data{i,1},2}) '.obj']);
+                            catch e
+                                disp(e.message);
+                            end
                         end
                         
                         [v,F]=loadawobj(['.\Data\Allen_obj_files\',num2str(app.all_structures{app.UITable.Data{i,1},2}),'.obj']);
-                        v = v/10;
+                        v = v/10; % change to pixel/slice value
                         if app.UITable.Data{i,5}
-                            if ~app.UITable.Data{i,6} % left
+                            if ~app.UITable.Data{i,6} % left only
                                 index_v = find(v(3,:)>app.mid_point);
                                 
                                 index_F = [];
@@ -139,7 +150,7 @@ classdef BrainMesh < matlab.apps.AppBase
                                 end
                                 F(:,index_F) = [];
                             end
-                        else % right
+                        else % right only
                             index_v = find(v(3,:)<app.mid_point);
                             
                             index_F = [];
@@ -188,6 +199,11 @@ classdef BrainMesh < matlab.apps.AppBase
                         patch('Vertices',v','Faces',F','EdgeColor','none','FaceColor',str2num(app.UITable.Data{i,3}),'FaceAlpha',app.UITable.Data{i,4});
                     end
                 end
+                if waitf.CancelRequested
+                    close(f);
+                    close(waitf);
+                    return;
+                end
             end
             
             waitf.Value = .90; waitf.Message = 'Finishing...';
@@ -209,6 +225,7 @@ classdef BrainMesh < matlab.apps.AppBase
             close(waitf);
             f.Visible = 'on';
             
+            % callback for the spin_xyz toolbar
             function spin_callback(~,~,spin_axis)
                 for k = 1:36
                     camorbit(10,0,'data',spin_axis)
@@ -216,7 +233,7 @@ classdef BrainMesh < matlab.apps.AppBase
                     pause(0.05);
                 end
             end
-            
+            % callback for the save_video toolbar
             function video_callback(~,~)
                 answer = inputdlg({'How many cycles?','Duration for each cycle (sec):','Spin axis (x, y, or z):','Frame rate:','File name (*.avi or *.mp4):'},...
                     'Video parameters', [1 50; 1 50; 1 50; 1 50; 1 50],{'1','3','y','15',['spin-' datestr(now,'yyyy-mmm-dd-HH-MM-SS') '.avi']});
@@ -236,9 +253,9 @@ classdef BrainMesh < matlab.apps.AppBase
                         end
                         close(videoObj);
                         msgbox(['Video file (' answer{5} ') recorded successfully (folder: .\output\).']);
-                    catch
+                    catch e
                         close(videoObj);
-                        errordlg('Write video file failed.');
+                        errordlg(['Write video file failed: ' e.message]);
                     end
                 end
             end
@@ -254,7 +271,7 @@ classdef BrainMesh < matlab.apps.AppBase
                 case 'Yes'
                     delete(app)
                 case 'No'
-                    return
+                    return;
             end
         end
 
@@ -282,7 +299,7 @@ classdef BrainMesh < matlab.apps.AppBase
                 s = uistyle('BackgroundColor',hex2rgb(table2array(app.all_structures(index,15))));
                 addStyle(app.UITable,s,'cell',[size(app.UITable.Data,1),3]);
                 if any(index_in_table == index)
-                    warndlg(['structure ' app.all_structures{index,5}{1} ' is already in the Table.']);
+                    warndlg(['structure ' app.all_structures{index,5}{1} ' is duplicated in the Table.']);
                 end
             end
         end
@@ -294,9 +311,13 @@ classdef BrainMesh < matlab.apps.AppBase
 
         % Button pushed function: DeleteSelRowButton
         function DeleteSelRowButtonPushed(app, event)
-            app.UITable.Data(app.selected_cell(:,1),:) = []; % delete rows
-            % correct color
             if ~isempty(app.UITable.Data)
+                try
+                    app.UITable.Data(app.selected_cell(:,1),:) = []; % delete rows
+                catch e
+                    disp(e.message);
+                end
+                % correct color for each row
                 for i = 1:size(app.UITable.Data,1)
                     if ~ischar(app.UITable.Data{i,1}) % added Allen obj files
                         s = uistyle('BackgroundColor',str2num(app.UITable.Data{i,3}));
@@ -315,7 +336,7 @@ classdef BrainMesh < matlab.apps.AppBase
         % Cell selection callback: UITable
         function UITableCellSelection(app, event)
             app.selected_cell = event.Indices;
-            if size(app.selected_cell,1) == 1 && app.selected_cell(1,2) == 3
+            if size(app.selected_cell,1) == 1 && app.selected_cell(1,2) == 3 % select the 3rd col
                 if ischar(app.UITable.Data{app.selected_cell(1,1),1}) && strcmp(app.UITable.Data{app.selected_cell(1,1),1},'u_slice')
                     answer = inputdlg('Enter a colormap (gray, jet, hsv, etc.): ','Chose a colormap');
                     if isempty(answer) || numel(answer)>1
@@ -469,7 +490,7 @@ classdef BrainMesh < matlab.apps.AppBase
             switch selection
                 case 'Yes'
                     if(~isdeployed)
-                        cd(fileparts(which('BrainMesh.m')));
+                        cd(fileparts(which('BrainMesh..m')));
                     end
                     % check current files in the folder
                     obj_files = dir('.\Data\Allen_obj_files\*.obj');
@@ -480,15 +501,18 @@ classdef BrainMesh < matlab.apps.AppBase
                         curr_obj_file_list(i) = str2double(obj_files{i}(1:end-4));
                     end
                     
-                    waitf = uiprogressdlg(app.BrainMeshUIFigure,'Title','Downloading files from Allen Institute','Message','Downloading 1/840 file...');
+                    waitf = uiprogressdlg(app.BrainMeshUIFigure,'Title','Downloading files from Allen Institute','Message','Downloading 1/840 file...','Cancelable','on');
                     
                     for i_file = 1:numel(app.Allen_obj_file_list)
                         waitf.Value = i_file/numel(app.Allen_obj_file_list);
                         waitf.Message = ['Downloading ' num2str(i_file) '/840 file...'];
-                        if ~any(app.Allen_obj_file_list(i_file) == curr_obj_file_list)
-                            % only download missing files
+                        if ~any(app.Allen_obj_file_list(i_file) == curr_obj_file_list) % only download missing files
                             websave(['.\Data\Allen_obj_files\' num2str(app.Allen_obj_file_list(i_file)) '.obj'],...
                                 ['http://download.alleninstitute.org/informatics-archive/current-release/mouse_ccf/annotation/ccf_2017/structure_meshes/' num2str(app.Allen_obj_file_list(i_file)) '.obj']);
+                        end
+                        if waitf.CancelRequested
+                            close(waitf);
+                            return;
                         end
                     end
                     
