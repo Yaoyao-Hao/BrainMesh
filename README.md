@@ -7,7 +7,7 @@
 
 
 ## Getting Started
-Run ```BrainMesh.m``` in MATLAB (R2019)
+Run ```BrainMesh.m``` in MATLAB (developed in R2019)
 
 ## Highlighted Features
 * Select Allen brain structures direct from a tree component (GUI)
