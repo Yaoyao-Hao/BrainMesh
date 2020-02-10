@@ -32,7 +32,7 @@ Run ```BrainMesh.m``` in MATLAB (developed in R2019)
   - select menu->File->Save to save the current scene to an image.
 
 ## Citation
-BrainMesh: A Matlab GUI for rendering 3D mouse brain structures (2020) https://github.com/yaoyao-hao/BrainMesh/
+**BrainMesh: A Matlab GUI for rendering 3D mouse brain structures (2020) https://github.com/yaoyao-hao/BrainMesh/**
 
 ## Contribution
 Feel free to pull a request If you want to contribute code to this repository, or leave your messages (bugs, comments, etc.) in the Issues page.
