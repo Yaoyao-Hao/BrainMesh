@@ -208,25 +208,110 @@ classdef BrainMesh < matlab.apps.AppBase
             
             waitf.Value = .90; waitf.Message = 'Finishing...';
             
-            view(-5,-25); camroll(10);
+            az = 355; el = -25;
+            view(az,el);
             axis('equal'); axis('off'); axis('tight'); axis('vis3d');
             light('Position',[-7000 -10000 -5000]);
             snapnow
             ctb = cameratoolbar(f,'show');
-            uipushtool(ctb,'CData',double(imread('.\Data\icons\icon_x.png'))/255,'Separator','on','ClickedCallback',{@spin_callback,'x'}, ...
+            uipushtool(ctb,'CData',double(imread('.\Data\icons\icon_x.png'))/255,'Separator','on','ClickedCallback',{@spin_one_circle,'x'}, ...
                 "HandleVisibility",'on','Tooltip','Spin along x-axis');
-            uipushtool(ctb,'CData',double(imread('.\Data\icons\icon_y.png'))/255,'Separator','off','ClickedCallback',{@spin_callback,'y'}, ...
+            uipushtool(ctb,'CData',double(imread('.\Data\icons\icon_y.png'))/255,'Separator','off','ClickedCallback',{@spin_one_circle,'y'}, ...
                 "HandleVisibility",'on','Tooltip','Spin along y-axis');
-            uipushtool(ctb,'CData',double(imread('.\Data\icons\icon_z.png'))/255,'Separator','off','ClickedCallback',{@spin_callback,'z'}, ...
+            uipushtool(ctb,'CData',double(imread('.\Data\icons\icon_z.png'))/255,'Separator','off','ClickedCallback',{@spin_one_circle,'z'}, ...
                 "HandleVisibility",'on','Tooltip','Spin along z-axis');
             uipushtool(ctb,'CData',double(imread('.\Data\icons\icon_video.png'))/255,'Separator','on','ClickedCallback',@video_callback, ...
                 "HandleVisibility",'on','Tooltip','Export spin video');
+            uipushtool(ctb,'CData',double(imread('.\Data\icons\setting.png'))/255,'Separator','on','ClickedCallback',@setting_dialog, ...
+                "HandleVisibility",'on','Tooltip','Open a dialog for view control');
+            
             
             close(waitf);
             f.Visible = 'on';
             
+            function setting_dialog(~,~)
+                dialog_h = dialog('Position',[1000 300 300 200],'Name','Setting rendering view');
+                
+                uicontrol('Parent',dialog_h,'Style','pushbutton','Tag','x_plus','Position',[180,170,30,25], 'String','+','Callback',{@spin_control,'x',1});
+                uicontrol('Parent',dialog_h,'Style','pushbutton','Tag','x_minus','Position',[130,170,30,25], 'String','-','Callback',{@spin_control,'x',-1});
+                uicontrol('Parent',dialog_h,'Style','text','Position',[30,170,100,20], 'String','Spin X axis:');
+                
+                uicontrol('Parent',dialog_h,'Style','pushbutton','Tag','y_plus','Position',[180,140,30,25], 'String','+','Callback',{@spin_control,'y',1});
+                uicontrol('Parent',dialog_h,'Style','pushbutton','Tag','y_minus','Position',[130,140,30,25], 'String','-','Callback',{@spin_control,'y',-1});
+                uicontrol('Parent',dialog_h,'Style','text','Position',[30,140,100,20], 'String','Spin Y axis:');
+                
+                uicontrol('Parent',dialog_h,'Style','pushbutton','Tag','z_plus','Position',[180,110,30,25], 'String','+','Callback',{@spin_control,'z',1});
+                uicontrol('Parent',dialog_h,'Style','pushbutton','Tag','z_minus','Position',[130,110,30,25], 'String','-','Callback',{@spin_control,'z',-1});
+                uicontrol('Parent',dialog_h,'Style','text','Position',[30,110,100,20], 'String','Spin Z axis:');
+                
+                uicontrol('Parent',dialog_h,'Style','pushbutton','Tag','roll_plus','Position',[180,80,30,25], 'String','+','Callback',{@spin_control,'roll',1});
+                uicontrol('Parent',dialog_h,'Style','pushbutton','Tag','roll_minus','Position',[130,80,30,25], 'String','-','Callback',{@spin_control,'roll',-1});
+                uicontrol('Parent',dialog_h,'Style','text','Position',[30,80,100,20], 'String','Camera Roll:');
+                
+                uicontrol('Parent',dialog_h,'Style','pushbutton','Tag','az_plus','Position',[180,50,30,25], 'String','+','Callback',{@spin_control,'az',1});
+                uicontrol('Parent',dialog_h,'Style','pushbutton','Tag','az_minus','Position',[130,50,30,25], 'String','-','Callback',{@spin_control,'az',-1});
+                uicontrol('Parent',dialog_h,'Style','text','Position',[30,50,100,20], 'String','Azimuth:');
+                uicontrol('Parent',dialog_h,'Style','text','Tag','az_value','Position',[215,50,100,20], 'String',['az = ', num2str(az)]);
+                
+                uicontrol('Parent',dialog_h,'Style','pushbutton','Tag','el_plus','Position',[180,20,30,25], 'String','+','Callback',{@spin_control,'el',1});
+                uicontrol('Parent',dialog_h,'Style','pushbutton','Tag','el_minus','Position',[130,20,30,25], 'String','-','Callback',{@spin_control,'el',-1});
+                uicontrol('Parent',dialog_h,'Style','text','Position',[30,20,100,20], 'String','Elevation:');
+                uicontrol('Parent',dialog_h,'Style','text','Tag','el_value','Position',[215,20,100,20], 'String',['el = ', num2str(el)]);
+                
+                uicontrol('Parent',dialog_h,'Style','pushbutton','Tag','reset','Position',[235,155,50,35], 'String','Reset','Callback',{@spin_control,'reset',0});
+                
+                uicontrol('Parent',dialog_h,'Style','text','Position',[220,120,80,20], 'String','Step (degree)');
+                uicontrol('Parent',dialog_h,'Style','edit','Tag','step_value','Position',[235,105,50,20], 'String','10');
+                
+            end
+            
+            function spin_control(~,~,spin_axis,direction)
+                allaxes = findall(f, 'type', 'axes');
+                h = findobj('Tag','step_value');
+                step = str2num(h.String); % degree
+                if strcmp(spin_axis,'roll')
+                    camroll(allaxes,10*direction)
+                elseif strcmp(spin_axis,'az')
+                    if direction == 1
+                        az = rem(az + step, 360);
+                    else
+                        az = rem(az - step, 360);
+                        if az < 0
+                            az = az + 360;
+                        end
+                    end
+                    h = findobj('Tag','az_value');
+                    h.String = ['az = ', num2str(az)];
+                    view(allaxes, az,el);
+                elseif strcmp(spin_axis,'el')
+                    if direction == 1
+                        el = el + step;
+                        if el > 90
+                            el = 90;
+                        end
+                    else
+                        el = el - step;
+                        if el < -90
+                            el = -90;
+                        end
+                    end
+                    h = findobj('Tag','el_value');
+                    h.String = ['el = ', num2str(el)];
+                    view(allaxes, az,el);
+                elseif strcmp(spin_axis,'reset')
+                    az = 355; el = -25;
+                    view(allaxes,az,el);
+                    h = findobj('Tag','az_value');
+                    h.String = ['az = ', num2str(az)];
+                    h = findobj('Tag','el_value');
+                    h.String = ['el = ', num2str(el)];
+                else % x,y,z
+                    camorbit(allaxes,10*direction,0,'data',spin_axis);
+                end
+            end
+            
             % callback for the spin_xyz toolbar
-            function spin_callback(~,~,spin_axis)
+            function spin_one_circle(~,~,spin_axis)
                 for k = 1:36
                     camorbit(10,0,'data',spin_axis)
                     drawnow
@@ -259,7 +344,6 @@ classdef BrainMesh < matlab.apps.AppBase
                     end
                 end
             end
-            
         end
 
         % Close request function: BrainMeshUIFigure
