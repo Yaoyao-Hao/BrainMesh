@@ -42,8 +42,8 @@ classdef BrainMesh < matlab.apps.AppBase
         function startupFcn(app, var)
             % Change to current folder
             if(~isdeployed)
-                cd(fileparts(which('BrainMesh..m')));
-                addpath(fileparts(which('BrainMesh..m')));
+                cd(fileparts(which('BrainMesh.m')));
+                addpath(fileparts(which('BrainMesh.m')));
                 addpath(".\functions\");
             end
             
@@ -108,7 +108,7 @@ classdef BrainMesh < matlab.apps.AppBase
             hold("on");
             
             if(~isdeployed)
-                cd(fileparts(which('BrainMesh..m')));
+                cd(fileparts(which('BrainMesh.m')));
             end
             
             for i = 1:size(app.UITable.Data,1) % for each structures in the Table
@@ -574,7 +574,7 @@ classdef BrainMesh < matlab.apps.AppBase
             switch selection
                 case 'Yes'
                     if(~isdeployed)
-                        cd(fileparts(which('BrainMesh..m')));
+                        cd(fileparts(which('BrainMesh.m')));
                     end
                     % check current files in the folder
                     obj_files = dir('.\Data\Allen_obj_files\*.obj');
@@ -618,7 +618,7 @@ classdef BrainMesh < matlab.apps.AppBase
             % Create BrainMeshUIFigure and hide until all components are created
             app.BrainMeshUIFigure = uifigure('Visible', 'off');
             app.BrainMeshUIFigure.AutoResizeChildren = 'off';
-            app.BrainMeshUIFigure.Position = [10 150 1024 768];
+            app.BrainMeshUIFigure.Position = [10 50 1024 768];
             app.BrainMeshUIFigure.Name = 'BrainMesh';
             app.BrainMeshUIFigure.Resize = 'off';
             app.BrainMeshUIFigure.CloseRequestFcn = createCallbackFcn(app, @BrainMeshUIFigureCloseRequest, true);
