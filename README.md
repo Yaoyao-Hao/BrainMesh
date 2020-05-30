@@ -1,6 +1,6 @@
 # BrainMesh
 
-**A Matlab graphical user interface (GUI) for rendering 3D mouse brain structures**
+**A MATLAB graphical user interface (GUI) for rendering 3D mouse brain structures**
 
 
 ![alt text](https://github.com/yaoyao-hao/BrainMesh/blob/master/docs/media/spin.gif)
